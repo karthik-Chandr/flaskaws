@@ -5,13 +5,10 @@ import json
 
 app = Flask(__name__)
 
-secrets_manager = boto3.client('secretsmanager', )
-region_name = "us-east-2"
+secrets_manager = boto3.client('secretsmanager', "us-east-1" )
 
-# Fetch the RDS endpoint secret
-rds_endpoint_secret = json.loads(secrets_manager.get_secret_value(SecretId='RDSEndpointSecret').get('SecretString'))
 
-secrets_manager = boto3.client('secretsmanager',"us-east-1")
+
 # Fetch the RDS endpoint secret
 rds_endpoint_secret = json.loads(secrets_manager.get_secret_value(SecretId='RDSInstanceEndpoint').get('SecretString'))
 print(rds_endpoint_secret)
@@ -33,7 +30,7 @@ rds_endpoint = rds_endpoint_secret['RDSInstanceEndpoint']
 
 print(rds_endpoint)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://master_username_secret:master_user_password_secret@rds_endpoint/flaskaws'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/flaskaws'.format(master_username_secret, master_user_password_secret,rds_endpoint)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "somethingunique"
 
