@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+
+{% block body %}
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{message}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <table class="table table-success table-striped table-hover" border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Occupation</th>
+                    <th>Salary</th>
+                     <th colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in datas %}
+                    <tr>
+                        <td>{{data.id}}</td>
+                        <td>{{data.name}}</td>
+                        <td>{{data.occupation}}</td>
+                        <td>{{data.salary}}</td>
+                        <td>
+                            <a href="/update/{{data.id}}" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modaledit{{data.id}}">Update</a>
+                             <a href="/delete/{{data.id}}" class="btn btn-danger" onclick="return confirm('Are you sure to delete ?')">Delete</a>
+                        </td>
+                    </tr>
+
+
+                     <!-- update model -->
+ <div id="modaledit{{data.id}}" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title">Update Data</h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('update')}}" method="POST">
+
+
+               <div class="form-group">
+
+                  <label>Title:</label>
+		           <input type="hidden"  name="id" value="{{data.id}}">
+                  <input type="text" class="form-control" name="name" value="{{data.name}}" >
+
+               </div>
+
+
+
+                <div class="form-group">
+                  <label>Author:</label>
+                  <input type="text" class="form-control" name="occupation" value="{{data.occupation }}">
+               </div>
+
+                 <div class="form-group">
+                  <label>Price:</label>
+                  <input type="number" class="form-control" name="salary" value="{{data.salary }}">
+               </div>
+
+               <div class="form-group">
+                  <button class="btn btn-primary mt-4" type="submit">Update Book</button>
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+         </div>
+
+
+      </div>
+
+
+   </div>
+
+
+</div>
+
+
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
