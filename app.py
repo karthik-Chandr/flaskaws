@@ -77,7 +77,7 @@ def update():
         my_data.salary = request.form['salary']
 
         db.session.commit()
-        flash("Book is updated")
+        flash("Data is updated")
         return redirect(url_for('index'))
 
 @app.route('/delete/<id>/', methods = ['GET', 'POST'])
